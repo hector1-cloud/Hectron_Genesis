@@ -1,0 +1,10 @@
+name: Orbital Sync
+on:
+  push:
+    branches: [main]
+jobs:
+  orbital-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Orbital Link OK"

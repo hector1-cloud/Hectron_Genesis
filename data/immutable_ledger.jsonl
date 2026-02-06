@@ -1,0 +1,2 @@
+{"timestamp":"2026-03-21T00:00:00Z","event":"GENESIS_INIT","node":"hectron-node-01","message":"Nacimiento de la red Hectron"}
+{"timestamp":"2026-03-21T00:05:00Z","event":"FIRST_AGENT","agent":"Oracle_V","message":"Agente oráculo activado"}
