@@ -1,0 +1,6 @@
+flet
+ccxt
+openai
+requests
+fastapi
+uvicorn
