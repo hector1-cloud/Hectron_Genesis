@@ -1,4 +1,4 @@
-name: Forja de HECTRON APK
+name: Construir Hectron APK
 
 on:
   push:
@@ -7,41 +7,42 @@ on:
 
 jobs:
   build:
-    name: Compilando en la Nube
     runs-on: ubuntu-latest
+    
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-      - name: Descargando ADN del Repositorio
+      - name: Obtener el código
         uses: actions/checkout@v4
 
-      - name: Instalando Python (El Cerebro)
+      - name: Instalar Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.13'
 
-      - name: Instalando Java (Requisito de Android)
+      # 🛡️ BLINDAJE 1: Entregamos EXACTAMENTE el Flutter 3.41.4 que exige Flet
+      - name: Instalar SDK de Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.4'
+
+      # 🛡️ BLINDAJE 2: Motor Java (Obligatorio para que no colapse al armar el Android)
+      - name: Configurar Motor Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Instalando Flutter SDK (La Maquinaria Pesada)
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
+      - name: Instalar Flet
+        run: pip install flet
 
-      - name: Instalando Flet
-        run: pip install -r requirements.txt
-
-      - name: 🛠️ BYPASS TÁCTICO: Extrayendo el núcleo a la raíz
-        run: cp src/main.py ./main.py
-
-      - name: ⚙️ COMPILANDO APK ⚙️
+      - name: Construir el APK
         run: flet build apk
 
-      - name: Entregando el Artefacto (Tu App)
+      - name: Subir el APK terminado
         uses: actions/upload-artifact@v4
         with:
-          name: HECTRON-V6-APK
+          name: Hectron-Release
           path: build/apk/**/*.apk
           
