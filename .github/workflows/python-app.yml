@@ -22,14 +22,21 @@ jobs:
         with:
           python-version: '3.13'
 
+      # 🛡️ BLINDAJE ABSOLUTO: Instalamos Flutter ANTES para que Flet no haga preguntas
+      - name: Instalar SDK de Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
       - name: Instalar Flet
         run: pip install flet
 
       - name: Construir el APK
-        run: yes | flet build apk
+        run: flet build apk
 
       - name: Subir el APK terminado
         uses: actions/upload-artifact@v4
         with:
           name: Hectron-Release
           path: build/apk/**/*.apk
+          
