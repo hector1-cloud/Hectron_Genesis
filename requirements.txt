@@ -1,6 +1,4 @@
 flet
-ccxt
-openai
+google-genai
 requests
-fastapi
-uvicorn
+apscheduler
