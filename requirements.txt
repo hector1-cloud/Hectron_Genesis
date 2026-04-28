@@ -3,3 +3,4 @@ google-genai
 requests
 apscheduler
 npm
+get-pip.py
