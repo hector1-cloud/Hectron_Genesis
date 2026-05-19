@@ -1,0 +1,15 @@
+[project]
+name = "hectron"
+version = "2026.1"
+requires-python = ">=3.11"
+dependencies = ["toga", "httpx", "python-dotenv"]
+
+[tool.briefcase]
+project_name = "Hectron"
+bundle = "com.abada.hectron"
+version = "2026.1"
+
+[tool.briefcase.app.hectron]
+formal_name = "Hectron IA"
+sources = ["src"]
+icon = "icons/icon"

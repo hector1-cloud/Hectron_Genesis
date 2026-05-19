@@ -1,8 +1,8 @@
 fastapi
 uvicorn[standard]
-httpx
 python-dotenv
+httpx
 gTTS
 pillow
-briefcase
 toga
+briefcase
