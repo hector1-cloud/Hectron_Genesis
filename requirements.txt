@@ -1,6 +1,4 @@
-flet
-google-genai
+flet[all]
 requests
 apscheduler
-npm
-get-pip.py
+pillow
