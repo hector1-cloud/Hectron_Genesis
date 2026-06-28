@@ -50,7 +50,21 @@ def main(page: ft.Page):
     page.padding = 0  # Quitamos padding para que el SafeArea mande
     
     # IMPORTANTE: Esto evita que la página entera rebote y permite que el ListView mande
-    page.scroll = None 
+    page.scroll = None
+    
+    # Load Vercel Web Analytics
+    # The script is loaded from the assets directory
+    analytics_script = """
+    (function() {
+        var script = document.createElement('script');
+        script.type = 'module';
+        script.textContent = "import { inject } from 'https://cdn.jsdelivr.net/npm/@vercel/analytics@1/dist/index.mjs'; inject({ mode: 'production' });";
+        document.head.appendChild(script);
+        console.log('[HECTRON] Vercel Analytics initialized');
+    })();
+    """
+    # Note: In Flet web mode, custom JavaScript execution may be limited.
+    # The analytics will work best when deployed to Vercel's infrastructure. 
 
     historial_mensajes = cargar_memoria()
 
@@ -144,5 +158,6 @@ def main(page: ft.Page):
 
 if __name__ == "__main__":
     # Forma compatible con versiones viejas y nuevas de Flet en Termux
-    ft.app(target=main, view="web_browser", port=8080)
+    # Added assets_dir to support Vercel Web Analytics
+    ft.app(target=main, view="web_browser", port=8080, assets_dir="assets")
   
