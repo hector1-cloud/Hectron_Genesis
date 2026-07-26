@@ -29,15 +29,15 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.24.x'
+          flutter-version: '3.24.5'
 
       - name: Install Flet
         run: |
           python -m pip install --upgrade pip
-          pip install flet[all]
+          pip install "flet[all]"
 
       - name: Build APK
-        run: flet build apk --release --verbose
+        run: flet build apk --verbose
         env:
           FLET_CLI_NO_RICH_OUTPUT: 1
 
@@ -45,5 +45,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Hectron-APK
-          path: build/apk/*.apk
+          path: |
+            build/apk/*.apk
+            build/**/*.apk
+          if-no-files-found: warn
           retention-days: 30
