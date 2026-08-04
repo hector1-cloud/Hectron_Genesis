@@ -3,21 +3,56 @@ name: Construir Hectron APK (Reliable)
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'lib/**'
+      - 'android/**'
+      - 'ios/**'
+      - 'pubspec.yaml'
+      - 'flet_app/**'
+      - 'assets/**'
+      - '.github/workflows/**'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'lib/**'
+      - 'android/**'
+      - 'ios/**'
+      - 'pubspec.yaml'
+      - 'flet_app/**'
+      - 'assets/**'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 jobs:
   build-apk:
     runs-on: ubuntu-latest
+    env:
+      CI: true
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: false
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      - name: Setup Node.js (ci for JS deps if present)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install JS dependencies (if any)
+        run: |
+          if [ -f package.json ]; then
+            npm ci
+          else
+            echo "No package.json found; skipping npm install"
+          fi
 
       - name: Install Java 17
         uses: actions/setup-java@v4
@@ -28,16 +63,28 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
-          flutter-version: '3.24.5'
+          flutter-version: '3.44.7'
 
-      - name: Install Flet
+      - name: Verify Flutter
+        run: |
+          flutter --version
+          dart --version
+
+      - name: Install Flet CLI
         run: |
           python -m pip install --upgrade pip
-          pip install "flet[all]"
+          pip install flet-cli==0.86.2
 
       - name: Build APK
-        run: flet build apk --verbose
+        run: |
+          set -euo pipefail
+          # Prefer non-interactive flag; fallback to piping 'y' if needed
+          if command -v flet >/dev/null 2>&1; then
+            flet build apk --yes 2>/dev/null || printf 'y\n' | flet build apk --verbose
+          else
+            echo "flet not available in PATH"
+            exit 1
+          fi
         env:
           FLET_CLI_NO_RICH_OUTPUT: 1
 
