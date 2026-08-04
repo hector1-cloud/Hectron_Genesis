@@ -8,24 +8,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     env:
+      CI: true
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Obtener el código
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: false
 
       - name: Instalar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
 
-      # 🛡️ BLINDAJE 1: Entregamos EXACTAMENTE el Flutter 3.41.4 que exige Flet
+      # 🛡️ BLINDAJE 1: Entregamos EXACTAMENTE el Flutter 3.44.7 que exige Flet
       - name: Instalar SDK de Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41.4'
+          flutter-version: '3.44.7'
+
+      - name: Verificar Flutter
+        run: |
+          flutter --version
+          dart --version
 
       # 🛡️ BLINDAJE 2: Motor Java (Obligatorio para que no colapse al armar el Android)
       - name: Configurar Motor Java
@@ -34,15 +42,25 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Instalar Flet
-        run: pip install flet
+      - name: Instalar dependencias de Python y flet-cli
+        run: |
+          python -m pip install --upgrade pip
+          pip install flet-cli==0.86.2
 
-      - name: Construir el APK
-        run: flet build apk
+      - name: Construir el APK (no interactivo)
+        env:
+          CI: true
+        run: |
+          # Intentar con flag no interactivo si flet lo soporta, si no, forzar respuesta afirmativa
+          if command -v flet >/dev/null 2>&1; then
+            flet build apk --yes 2>/dev/null || printf 'y\n' | flet build apk
+          else
+            echo "flet no está disponible en PATH"
+            exit 1
+          fi
 
       - name: Subir el APK terminado
         uses: actions/upload-artifact@v4
         with:
           name: Hectron-Release
           path: build/apk/**/*.apk
-          
