@@ -1,0 +1,25 @@
+{
+  "name": "hectron-genesis",
+  "version": "2026.1.0",
+  "description": "Hectron Genesis - AI System with Vercel Analytics",
+  "type": "module",
+  "scripts": {
+    "postinstall": "echo 'Vercel Analytics installed successfully'"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.4.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hector1-cloud/Hectron_Genesis.git"
+  },
+  "keywords": [
+    "flet",
+    "python",
+    "ai",
+    "analytics"
+  ],
+  "author": "Hector Jazziel Lopez Ruiz",
+  "license": "SEE LICENSE IN LICENSE.md"
+}

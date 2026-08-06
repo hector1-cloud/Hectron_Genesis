@@ -579,7 +579,6 @@ class MultiAPIClient:
             return data["content"][0]["text"]
 
     async def _call_groq(self, config: APIConfig, prompt: str, system: Optional[str], temperature: float, max_tokens: int) -> str:
-        return await self._call_openai(config, prompt, system, temperature: float, max_tokens: int) -> str:
         return await self._call_openai(config, prompt, system, temperature, max_tokens)
 
     async def _call_huggingface(self, config: APIConfig, prompt: str, system: Optional[str], temperature: float, max_tokens: int) -> str:
@@ -635,6 +634,7 @@ if __name__ == "__main__":
         target=main, 
         view=ft.AppView.WEB_BROWSER, 
         port=7860,       # Puerto obligatorio en Hugging Face Spaces
-        host="0.0.0.0"   # Permite conexiones externas
+        host="0.0.0.0",  # Permite conexiones externas
+        assets_dir="assets"  # Added to support Vercel Web Analytics
       )
       
